@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService {
         UserModel userModel = convertFromDataObject(userDO,userPasswordDo);
 
 
-        //通过用户的信息 比对用户的密码和加密的密码是不是相匹配
+        //通过用户的信息 比对用户的密码和加密的密码是不是相匹配 前者是输入的密码  后者是正确的密码
         if (!StringUtils.equals(encrptPassword,userModel.getEncrptPassword())){
             throw new BussinessException(EnumBussinessError.USER_LOGIN_FAIL);
         }

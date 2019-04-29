@@ -7,21 +7,17 @@ import com.miaoshaproject.error.EnumBussinessError;
 import com.miaoshaproject.response.CommonReturnType;
 import com.miaoshaproject.service.UserService;
 import com.miaoshaproject.service.model.UserModel;
-import org.apache.tomcat.util.security.MD5Encoder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 /**
@@ -62,37 +58,35 @@ public class UserController extends BaseController {
 
     }
 
-
-
-
-
-
     //用户注册接口
-    @RequestMapping(value = "/register",method = {RequestMethod.POST},consumes = {CONTENT_TYPE_FORMED})
+    @Transactional
+    @RequestMapping(value = "/register", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
     @ResponseBody
-    public CommonReturnType register(@RequestParam("telephone")String telephone,
-                                     @RequestParam("otpCode")String otpCode,
-                                     @RequestParam("name")String name,
-                                     @RequestParam("gender")Byte gender,
-                                     @RequestParam("age")Integer age,
-                                     @RequestParam("password")String password)
-            throws BussinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
-        //验证手机号与otpcode符合
-        String inSessopnOtpCode = (String)this.httpServletRequest.getSession().getAttribute(telephone);
-        if (!StringUtils.equals(otpCode,inSessopnOtpCode)){
-            throw new BussinessException(EnumBussinessError.PARAMETER_VALIDATION_ERROR,"短信验证码不符合");
+    public CommonReturnType register(@RequestParam(name = "telephone") String telephone,
+                                     @RequestParam(name = "otpCode") String otpCode,
+                                     @RequestParam(name = "name") String name,
+                                     @RequestParam(name = "gender") Byte gender,
+                                     @RequestParam(name = "age") Integer age,
+                                     @RequestParam(name="password")String password) throws BussinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
+        //验证手机号和对应otpcode相符
+        String inSessionOtpCode = (String) this.httpServletRequest.getSession().getAttribute(telephone);
+        if (!StringUtils.equals(otpCode, inSessionOtpCode)) {
+            throw new BussinessException(EnumBussinessError.PARAMETER_VALIDATION_ERROR, "短信验证码不符合");
         }
         //用户注册流程
         UserModel userModel = new UserModel();
         userModel.setName(name);
+        userModel.setGender(new Byte(String.valueOf(gender.intValue())));
         userModel.setAge(age);
-        userModel.setGender(gender);
         userModel.setTelephone(telephone);
         userModel.setRegisterMode("byphone");
         userModel.setEncrptPassword(this.EncodeByMd5(password));
+
         userService.register(userModel);
         return CommonReturnType.create(null);
+
     }
+
 
     public String EncodeByMd5(String str) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         //确定计算方法
@@ -118,15 +112,10 @@ public class UserController extends BaseController {
         //将otp验证码与用户的手机号码关联
             //使用httpSession绑定手机号与optcode
         httpServletRequest.getSession().setAttribute(telephone,optCode);
-
-
-
         //将otp验证码通过短信通道发送给用户
-        System.out.println("telephone =" + telephone + "&otpCode = " +optCode);
+        System.out.println("telephone = " + telephone + " & otpCode = " +optCode);
         return CommonReturnType.create(null);
     }
-
-
     @RequestMapping("/get")
     @ResponseBody
     public CommonReturnType getUser(@RequestParam(name = "id") Integer id) throws BussinessException{
@@ -137,14 +126,8 @@ public class UserController extends BaseController {
         if (userModel == null){
             throw new BussinessException(EnumBussinessError.USER_NOT_EXIST);
         }
-
-
-
-
-
         //将核心领域模型用户对象可供UI使用的viewObject
         UserVo userVo =  convertFromModel(userModel);
-
         //返回通用对象(正确的信息)
             //status字段 success
             //data字段 data

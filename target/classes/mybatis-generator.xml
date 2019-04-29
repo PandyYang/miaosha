@@ -39,9 +39,13 @@
 
 
         <!--生成对应表及类名-->
+        <!--
         <table tableName="user_info" domainObjectName="UserDO" enableCountByExample="false"
         enableUpdateByExample="false"></table>
         <table tableName="user_password" domainObjectName="UserPasswordDo"></table>
+        -->
+        <table tableName="item_stock" domainObjectName="ItemStockDO"></table>
+        <table tableName="item" domainObjectName="ItemDO"></table>
         <!--<table tableName="user_info" domainObjectName="UserDO" enableCountByExample="false"-->
         <!--enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"-->
         <!--selectByExampleQueryId="false"></table>-->

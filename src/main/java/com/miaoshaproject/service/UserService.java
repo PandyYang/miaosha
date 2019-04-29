@@ -1,7 +1,19 @@
 package com.miaoshaproject.service;
 
+import com.alibaba.druid.util.StringUtils;
+import com.miaoshaproject.controller.BaseController;
+import com.miaoshaproject.controller.UserController;
 import com.miaoshaproject.error.BussinessException;
+import com.miaoshaproject.error.EnumBussinessError;
+import com.miaoshaproject.response.CommonReturnType;
 import com.miaoshaproject.service.model.UserModel;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * @Author: Pandy
@@ -13,12 +25,6 @@ public interface UserService {
     //通过用户id获取用户对象
     UserModel getUserById(Integer id);
     void register(UserModel userModel) throws BussinessException;
-
-    /**
-     *
-     * @param telephone 用户注册的手机
-     * @param encrptPassword  用户加密后的密码
-     * @throws BussinessException
-     */
     UserModel validateLogin(String telephone,String encrptPassword) throws BussinessException;
+
 }

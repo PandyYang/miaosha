@@ -29,5 +29,4 @@ public class ItemVo {
 
     private String imgUrl;
 
-
 }
