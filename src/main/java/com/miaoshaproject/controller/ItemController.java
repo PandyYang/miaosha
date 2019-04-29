@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
@@ -30,7 +31,9 @@ public class ItemController extends BaseController {
     @Autowired
     private ItemService itemService;
 
-    public CommonReturnType createItrm(@RequestParam(name = "title")String title,
+    //创建商品
+    @RequestMapping(value = "/create",method = {RequestMethod.POST},consumes = {CONTENT_TYPE_FORMED})
+    public CommonReturnType createItem(@RequestParam(name = "title")String title,
                                        @RequestParam(name = "description")String description,
                                        @RequestParam(name = "price")BigDecimal price,
                                        @RequestParam(name = "stock")Integer stock,
@@ -52,7 +55,8 @@ public class ItemController extends BaseController {
 
     }
 
-    //将前台的值转化为model中的值
+
+    //将前台传过来的值转化为model中的值
     private ItemVo convertVOFromModel(ItemModel itemModel){
 
         if (itemModel == null){

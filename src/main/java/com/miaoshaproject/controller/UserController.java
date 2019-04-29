@@ -58,6 +58,7 @@ public class UserController extends BaseController {
 
     }
 
+
     //用户注册接口
     @Transactional
     @RequestMapping(value = "/register", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
@@ -88,6 +89,7 @@ public class UserController extends BaseController {
     }
 
 
+    //加密字符串
     public String EncodeByMd5(String str) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         //确定计算方法
         MessageDigest md5 = MessageDigest.getInstance("MD5");
@@ -116,6 +118,8 @@ public class UserController extends BaseController {
         System.out.println("telephone = " + telephone + " & otpCode = " +optCode);
         return CommonReturnType.create(null);
     }
+
+
     @RequestMapping("/get")
     @ResponseBody
     public CommonReturnType getUser(@RequestParam(name = "id") Integer id) throws BussinessException{

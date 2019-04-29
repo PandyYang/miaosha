@@ -37,14 +37,12 @@ public class ItemServiceImpl implements ItemService {
 
     //将传入的类型转换为商品普通属性
     private ItemDO convertItemDOFromItemModel(ItemModel itemModel){
-        if (itemModel == null){
+        if(itemModel == null) {
             return null;
         }
         ItemDO itemDO = new ItemDO();
         BeanUtils.copyProperties(itemModel,itemDO);
-        //double类型传到前台会出现精度问题例如1.9---->1.999999... 所以需要对price进行转换
-        itemDO.setPrice(itemModel.getPrice().doubleValue());
-
+        //itemDO.setPrice(itemModel.getPrice().doubleValue());
         return itemDO;
     }
 
@@ -60,7 +58,6 @@ public class ItemServiceImpl implements ItemService {
     }
 
     //创建新的商品 需要同时修改通用属性以及相关的库存属性
-
     /**
      * 前台传递过来的属性在这里分成两个部分 一个是itemDO中需要存储的
      * 一个是
@@ -76,15 +73,16 @@ public class ItemServiceImpl implements ItemService {
         if (validator.validate(itemModel).isHasErrors()){
             throw new BussinessException(EnumBussinessError.PARAMETER_VALIDATION_ERROR);
         }
-
-
+        
         //转化itemmodel ->dataobject
             //数据转换过滤  只要往item传送的数据
         ItemDO itemDO = this.convertItemDOFromItemModel(itemModel);
-        //写入数据库
+            //item普通属性写入数据库(剥离库存)
+        System.out.println("------------------->");
         itemDOMapper.insertSelective(itemDO);
+        System.out.println("-------------------<");
 
-            //为itemstock关联itemid
+        //为itemstock关联itemid
         itemModel.setId(itemDO.getId());
             //数据转换过滤 只要往itemstock中传送数据
         ItemStockDO itemStockDO = this.convertItemStockDOFromItemModel(itemModel);
@@ -116,14 +114,15 @@ public class ItemServiceImpl implements ItemService {
     }
 
 
-    //底层向上层的转换
+    //读取数据转换之后向前台传递
     private ItemModel convertModelFromObject(ItemDO itemDO,ItemStockDO itemStockDO){
         ItemModel itemModel = new ItemModel();
         BeanUtils.copyProperties(itemDO,itemModel);
 
         //将itemdo中的属性赋值给model之后 取出stock中的库存  转换itemdo中的价格 也赋值给itemmodel  然后返回
-        itemModel.setPrice(new BigDecimal(itemDO.getPrice()));
+        //itemModel.setPrice(new BigDecimal(itemDO.getPrice()));
 
+        //
         itemModel.setStock(itemStockDO.getStock());
 
         return itemModel;

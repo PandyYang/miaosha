@@ -10,7 +10,6 @@ import com.miaoshaproject.service.UserService;
 import com.miaoshaproject.service.model.UserModel;
 import com.miaoshaproject.validator.ValidationResult;
 import com.miaoshaproject.validator.ValidatorImpl;
-import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +17,6 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.Validator;
-import javax.xml.bind.ValidationEvent;
-import java.lang.annotation.Target;
 
 /**
  * @Author: Pandy
@@ -55,6 +51,7 @@ public class UserServiceImpl implements UserService {
         return convertFromDataObject(userDO,userPasswordDo);
     }
 
+
     //用户注册
     @Override
     @Transactional
@@ -67,8 +64,6 @@ public class UserServiceImpl implements UserService {
         if (validate.isHasErrors()){
             throw new BussinessException(EnumBussinessError.PARAMETER_VALIDATION_ERROR,validate.getErrMsg());
         }
-
-
         /*if(StringUtils.isEmpty(userModel.getName())
                 || userModel.getGender() == null
                 || userModel.getAge() == null
@@ -99,7 +94,6 @@ public class UserServiceImpl implements UserService {
 
 
 
-
     //验证登录的合法性
     @Override
     public UserModel validateLogin(String telephone, String encrptPassword) throws BussinessException {
@@ -122,9 +116,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-
-
     //将model对象重新转为原来的user普通对象属性(没有加密密码)
     private UserDO convertFromModel(UserModel userModel){
         if (userModel == null){
@@ -134,6 +125,9 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(userModel,userDO);
         return userDO;
     }
+
+
+
     //将model对象重新转变为原来的user对象中的密码的加密属性
     private UserPasswordDo convertPasswordFromModel(UserModel userModel){
         if (userModel == null){
@@ -145,6 +139,7 @@ public class UserServiceImpl implements UserService {
         passwordDo.setUserId(userModel.getId());
         return passwordDo;
     }
+
 
     //整合用户普通属性与加密密码属性
     private UserModel convertFromDataObject(UserDO userDo, UserPasswordDo userPasswordDo){
@@ -161,7 +156,6 @@ public class UserServiceImpl implements UserService {
         if (userPasswordDo != null){
             userModel.setEncrptPassword(userPasswordDo.getEncrptPassword());
         }
-
         return userModel;
     }
 }
