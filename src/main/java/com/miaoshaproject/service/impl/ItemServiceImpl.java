@@ -123,6 +123,24 @@ public class ItemServiceImpl implements ItemService {
     }
 
 
+    //库存扣减
+    @Override
+    @Transactional
+    public boolean decreaseStock(Integer itemId, Integer amount) {
+        //影响的条目数
+        int affectedRow = itemStockDOMapper.decreaseStock(itemId, amount);
+        if (affectedRow > 0){
+            //更新成功
+            return true;
+        }
+        //失败
+        return false;
+    }
+
+
+
+
+
     //读取数据转换之后向前台传递
     private ItemModel convertModelFromObject(ItemDO itemDO,ItemStockDO itemStockDO){
         ItemModel itemModel = new ItemModel();

@@ -269,4 +269,11 @@
       item_id = #{itemId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+<!--当商品的库存大于扣减的数量的时候 执行itemStock方法 将stock值扣除相应数量-->
+  <update id="decreaseStock">
+    update item_stock
+    set stock = stock - #{amount}
+    where item_id = #{itemId} and stock >= #{amount}
+  </update>
 </mapper>

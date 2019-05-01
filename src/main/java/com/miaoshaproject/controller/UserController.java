@@ -52,7 +52,8 @@ public class UserController extends BaseController {
         //加入到用户登录成功的session中
             //加入会话标识
         this.httpServletRequest.getSession().setAttribute("IS_LOGIN",true);
-        this.httpServletRequest.getSession().setAttribute("IS_LOGIN_USER",userModel);
+        this.httpServletRequest.getSession().setAttribute("LOGIN_USER",userModel);
+        System.out.println(this.httpServletRequest.getSession().getAttribute("IS_LOGIN"));
 
         return CommonReturnType.create(null);
 

@@ -14,11 +14,14 @@ public enum EnumBussinessError implements CommonError {
 
     //通用错误类型00001
     PARAMETER_VALIDATION_ERROR(10001,"参数不合法"),
-    UNKNOW_ERROR(20002,"未知错误"),
+    UNKNOW_ERROR(10002,"未知错误"),
 
-    //10000开头为用户信息相关错误定义
-    USER_NOT_EXIST(30001,"用户不存在"),
-    USER_LOGIN_FAIL(20003,"用户手机号或者密码不合法")
+    //20000开头为用户信息相关错误定义
+    USER_NOT_EXIST(20001,"用户不存在"),
+    USER_LOGIN_FAIL(20002,"用户手机号或者密码不合法"),
+    USER_NOT_LOGIN(20003,"用户未登录"),
+    //30000开头 为交易错误
+    STOCK_NOT_ENOUGH(30001,"库存不足")
     ;
 
 
