@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: Pandy
@@ -91,9 +92,17 @@ public class ItemServiceImpl implements ItemService {
         return this.getItemById(itemModel.getId());
     }
 
+
     @Override
     public List<ItemModel> listItem() {
-        return null;
+        List<ItemDO> itemDOList = itemDOMapper.listItem();
+        //java8的语法 将itemDO map成itemModel 函数式得进行参数的拼接
+        List<ItemModel> itemModels = itemDOList.stream().map(itemDO -> {
+            ItemStockDO itemStockDO = itemStockDOMapper.selectByItemId(itemDO.getId());
+            ItemModel itemModel = this.convertModelFromObject(itemDO, itemStockDO);
+            return itemModel;
+        }).collect(Collectors.toList());
+        return itemModels;
     }
 
     /**
