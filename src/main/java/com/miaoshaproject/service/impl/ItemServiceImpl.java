@@ -73,7 +73,7 @@ public class ItemServiceImpl implements ItemService {
         if (validator.validate(itemModel).isHasErrors()){
             throw new BussinessException(EnumBussinessError.PARAMETER_VALIDATION_ERROR);
         }
-        
+
         //转化itemmodel ->dataobject
             //数据转换过滤  只要往item传送的数据
         ItemDO itemDO = this.convertItemDOFromItemModel(itemModel);

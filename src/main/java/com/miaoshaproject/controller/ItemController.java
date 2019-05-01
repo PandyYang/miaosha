@@ -8,10 +8,7 @@ import com.miaoshaproject.service.model.ItemModel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
@@ -33,6 +30,7 @@ public class ItemController extends BaseController {
 
     //创建商品
     @RequestMapping(value = "/create",method = {RequestMethod.POST},consumes = {CONTENT_TYPE_FORMED})
+    @ResponseBody
     public CommonReturnType createItem(@RequestParam(name = "title")String title,
                                        @RequestParam(name = "description")String description,
                                        @RequestParam(name = "price")BigDecimal price,
@@ -50,7 +48,7 @@ public class ItemController extends BaseController {
         ItemModel itemModelForReturn = itemService.createItem(itemModel);
 
         ItemVo itemVo = convertVOFromModel(itemModelForReturn);
-
+        //前后端是使用json传输数据 返回的是对象 必须加上responsebody注解  否则就是404异常
         return CommonReturnType.create(itemVo);
 
     }

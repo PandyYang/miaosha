@@ -11,7 +11,7 @@
     <context id="DB2Tables" targetRuntime="MyBatis3">
         <!--数据库连接地址账号密码-->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://127.0.0.1:3306/miaosha"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/miaosha-master"
                         userId="root"
                         password="root">
         </jdbcConnection>
