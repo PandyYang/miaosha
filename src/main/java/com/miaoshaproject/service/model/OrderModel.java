@@ -29,4 +29,9 @@ public class OrderModel {
 
     //购买金额
     private BigDecimal orderAmount;
+
+    //秒杀价格 若是非空则是以秒杀商品的方式进行下单
+    private Integer promoId;
+
+
 }

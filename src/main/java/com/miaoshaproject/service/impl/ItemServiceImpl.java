@@ -7,14 +7,15 @@ import com.miaoshaproject.dataobject.ItemStockDO;
 import com.miaoshaproject.error.BussinessException;
 import com.miaoshaproject.error.EnumBussinessError;
 import com.miaoshaproject.service.ItemService;
+import com.miaoshaproject.service.PromoService;
 import com.miaoshaproject.service.model.ItemModel;
+import com.miaoshaproject.service.model.PromoModel;
 import com.miaoshaproject.validator.ValidatorImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +36,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Autowired
     private ItemStockDOMapper itemStockDOMapper;
+
+    @Autowired
+    private PromoService promoService;
 
     //将传入的类型转换为商品普通属性
     private ItemDO convertItemDOFromItemModel(ItemModel itemModel){
@@ -116,9 +120,19 @@ public class ItemServiceImpl implements ItemService {
         if (itemDO == null){
             return null;
         }
+        //获取库存数量
         ItemStockDO itemStockDO = itemStockDOMapper.selectByItemId(id);
         //将dataobject-->model
         ItemModel itemModel = convertModelFromObject(itemDO,itemStockDO);
+
+        //获取活动商品信息
+        PromoModel promoModel= promoService.getPromoByItemId(itemModel.getId());
+
+        //有秒杀属性 或秒杀没有结束
+        if (promoModel != null && promoModel.getStatus().intValue()!=3){
+            itemModel.setPromoModel(promoModel);
+        }
+
         return itemModel;
     }
 
@@ -137,8 +151,12 @@ public class ItemServiceImpl implements ItemService {
         return false;
     }
 
-
-
+    //增加销量
+    @Override
+    @Transactional
+    public void increaseSales(Integer itemId, Integer amount) throws BussinessException {
+        itemDOMapper.increaseSales(itemId,amount);
+    }
 
 
     //读取数据转换之后向前台传递

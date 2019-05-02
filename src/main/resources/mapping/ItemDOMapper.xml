@@ -173,4 +173,7 @@ set sales = sales + #{amount}
 where id = #{id,jdbcType=INTEGER}
 </update>
 
+
+
+
 </mapper>

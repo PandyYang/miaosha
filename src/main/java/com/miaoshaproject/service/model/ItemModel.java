@@ -33,4 +33,7 @@ public class ItemModel {
 
     @NotBlank(message = "商品图片不能为空")
     private String imgUrl;
+
+    //使用聚合模型 如果promomodel 不为空 拥有还未结束的秒杀活动
+    private PromoModel promoModel;
 }

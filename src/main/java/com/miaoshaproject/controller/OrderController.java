@@ -32,7 +32,9 @@ public class OrderController extends BaseController {
     @RequestMapping(value = "/createorder",method = {RequestMethod.POST},consumes = {CONTENT_TYPE_FORMED})
     @ResponseBody
     public CommonReturnType createOrder(@RequestParam(name = "itemId")Integer itemId,
-                                        @RequestParam(name = "amount")Integer amount) throws BussinessException {
+                                        @RequestParam(name = "amount")Integer amount,
+                                        @RequestParam(name = "promoId",required = false) Integer promoId)
+                                        throws BussinessException {
 
 
 
@@ -45,7 +47,7 @@ public class OrderController extends BaseController {
         System.out.println(this.httpServletRequest.getSession().getAttribute("LOGIN_USER"));
         System.out.println(this.httpServletRequest.getSession().getAttribute("IS_LOGIN"));
         UserModel userModel = (UserModel) this.httpServletRequest.getSession().getAttribute("LOGIN_USER");
-        OrderModel order = orderService.createOrder(userModel.getId(), itemId, amount);
+        OrderModel order = orderService.createOrder(userModel.getId(), itemId, promoId,amount);
         return CommonReturnType.create(null);
 
     }

@@ -11,5 +11,5 @@ import com.miaoshaproject.service.model.OrderModel;
  */
 public interface OrderService {
     //用户 商品 以及购买数量 实现交易
-    OrderModel createOrder(Integer userId,Integer itemId,Integer amount) throws BussinessException;
+    OrderModel createOrder(Integer userId,Integer itemId,Integer promoId,Integer amount) throws BussinessException;
 }
